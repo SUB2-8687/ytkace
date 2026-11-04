@@ -52,6 +52,8 @@ mkdir -p "$APP/Frameworks"
 cp "$DYLIB" "$APP/Frameworks/YTKACE.dylib"
 cp -R "$ROOT/Resources/YTKACE.bundle" "$APP/YTKACE.bundle"
 
+bash "$ROOT/Scripts/strip-extras.sh" "$APP"
+
 bash "$ROOT/Scripts/sign-bundle.sh" "$APP"
 
 mkdir -p "$(dirname "$OUTPUT")"
