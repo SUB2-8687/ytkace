@@ -20,7 +20,7 @@
 "Auto Advance" = "자동 넘기기";
 "Auto-skip" = "자동 건너뛰기";
 "Avatar Preview" = "프로필 사진 미리보기";
-"BRAND & CAST" = "브랜드 및 전송";
+"BRAND & CAST" = "브랜드 및 전송(Cast)";
 "BRIGHTNESS & VOLUME" = "밝기 및 볼륨";
 "BUTTONS" = "버튼";
 "Back" = "뒤로";
@@ -74,7 +74,7 @@
 "Clear Cache Now" = "지금 캐시 지우기";
 "Clear Cache at Launch" = "실행 시 캐시 지우기";
 "Close" = "닫기";
-"Confirm Before Casting" = "전송 전 확인";
+"Confirm Before Casting" = "전송(Cast) 전 확인";
 "Custom" = "사용자 설정";
 "Custom Double-Tap Time" = "두 번 탭 시간 지정";
 "Custom speed" = "사용자 설정 재생 속도";
@@ -164,8 +164,8 @@
 "Remove Ask" = "\"질문하기\" 제거";
 "Remove Autoplay" = "자동재생 제거";
 "Remove Captions Button" = "자막 버튼 제거";
-"Remove Cast" = "전송 제거";
-"Remove Cast Button" = "전송 버튼 제거";
+"Remove Cast" = "전송(Cast) 제거";
+"Remove Cast Button" = "전송(Cast) 버튼 제거";
 "Remove Clip" = "\"클립\" 제거";
 "Remove Comment Guidelines" = "댓글 가이드라인 제거";
 "Remove Comment Preview" = "댓글 미리보기 제거";
@@ -278,7 +278,7 @@
 "Thumbnails" = "썸네일";
 "Titles" = "제목";
 "Top Corner" = "상단 모서리";
-"Top bar buttons, logo, and cast" = "상단 바 버튼, 로고 및 전송";
+"Top bar buttons, logo, and cast" = "상단 바 버튼, 로고 및 전송(Cast)";
 "Top buttons, branding and topic chips" = "상단 버튼, 브랜딩 및 주제 칩";
 "Turn Off Double Tap" = "두 번 탭 끄기";
 "Unskip" = "되돌리기";
@@ -332,7 +332,7 @@
 "CLEAR CACHE" = "캐시 지우기";
 "Cache Cleared" = "캐시를 지웠습니다";
 "Cancelled" = "취소됨";
-"Cast Confirmation" = "전송 확인";
+"Cast Confirmation" = "전송(Cast) 확인";
 "Pick a destination — Video, Audio, or Shorts — then choose the media file, its artwork, and any subtitles." = "동영상, 오디오, Shorts 중 저장할 위치를 고른 다음 미디어 파일, 아트워크, 자막을 선택하세요.";
 "Choose a YTKACE ZIP backup from Files." = "파일 앱에서 YTKACE ZIP 백업을 선택하세요.";
 "Choose and reorder the bottom tabs" = "하단 탭 선택 및 순서 변경";
@@ -411,7 +411,7 @@
 "Hide Account" = "계정 숨기기";
 "Hide Autoplay Button" = "자동재생 버튼 숨기기";
 "Hide Captions Button" = "자막 버튼 숨기기";
-"Hide Cast Button" = "전송 버튼 숨기기";
+"Hide Cast Button" = "전송(Cast) 버튼 숨기기";
 "Hide Comment Guidelines" = "댓글 가이드라인 숨기기";
 "Hide Comment Previews" = "댓글 미리보기 숨기기";
 "Hide Comments" = "댓글 숨기기";
@@ -600,7 +600,7 @@
 "This format is not permitted on this device. Pick a different quality." = "이 기기에서 허용되지 않는 형식입니다. 다른 화질을 선택하세요.";
 "No usable download session came back. Start the video briefly so a fresh one is issued, then try again." = "사용할 수 있는 다운로드 세션을 받지 못했습니다. 동영상을 잠깐 재생해 새 세션을 받은 후 다시 시도하세요.";
 "This video has not been set up for streaming yet. Start playing it for a second or two, then try the download again." = "이 동영상은 아직 스트리밍 준비가 되지 않았습니다. 1~2초 정도 재생한 후 다시 다운로드하세요.";
-"YouTube is about to open the Cast menu." = "YouTube에서 전송 메뉴를 엽니다.";
+"YouTube is about to open the Cast menu." = "YouTube에서 전송(Cast) 메뉴를 엽니다.";
 "YouTube menu unavailable" = "YouTube 메뉴를 사용할 수 없음";
 "The stream request was turned down. Close and reopen the video, let it play for a moment, then try again." = "스트림 요청이 거부되었습니다. 동영상을 닫았다가 다시 열고 잠시 재생한 후 다시 시도하세요.";
 "active" = "진행 중";
@@ -960,7 +960,7 @@ CC BY-NC-SA 4.0 라이선스가 적용됩니다.";
 "Remove Notifications Button" = "알림 버튼 제거";
 "Remove Messages Button" = "메시지 버튼 제거";
 "Remove Search Button" = "검색 버튼 제거";
-"Ask before opening the Cast menu." = "전송 메뉴를 열기 전에 확인합니다.";
+"Ask before opening the Cast menu." = "전송(Cast) 메뉴를 열기 전에 확인합니다.";
 "Needs the Liquid Glass tab bar." = "Liquid Glass 탭 바가 필요합니다.";
 "Pure black background in dark mode." = "다크 모드에서 완전한 검은색 배경을 사용합니다.";
 "Extra Dim" = "더 어둡게";
