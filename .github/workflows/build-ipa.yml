@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       ipa_url:
-        description: YouTube IPA URL (iOS 16 base, 21.33.6)
+        description: YouTube IPA URL (iOS 16 base, 21.33.6). Dropbox, Google Drive, OneDrive/SharePoint share links or direct links
         required: true
         default: "https://www.dropbox.com/scl/fi/1m7rq3lpkg3mfsone2299/com.google.ios.youtube-21.33.6-eeveedecrypter.ipa?rlkey=b2nsvre89881puprynwkfau8q&st=4fkh7ry8&dl=1"
         type: string
       ipa_url_ios17:
-        description: Second YouTube IPA URL (iOS 17+ base, 21.45.4). Leave empty to build one IPA.
+        description: Second YouTube IPA URL (iOS 17+ base, 21.45.4). Dropbox, Google Drive, OneDrive/SharePoint share links or direct links. Leave empty to build one IPA.
         required: false
         default: "https://www.dropbox.com/scl/fi/hulqut3vvlwa0x6bpztnz/com.google.ios.youtube-21.45.4-eeveedecrypter.ipa?rlkey=niiw36hgppqdmhz74nm45dagg&st=0wgd5has&dl=1"
         type: string
@@ -44,6 +44,7 @@ jobs:
           PY
 
   package:
+    name: package (${{ matrix.target.label }})
     needs: [build, plan]
     runs-on: macos-latest
     strategy:
@@ -67,19 +68,7 @@ jobs:
         env:
           IPA_URL: ${{ matrix.target.url }}
           GH_TOKEN: ${{ github.token }}
-        run: |
-          if [[ "$IPA_URL" == "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/"* ]]; then
-            curl --fail --location \
-              --header "Accept: application/octet-stream" \
-              --header "Authorization: Bearer $GH_TOKEN" \
-              "$IPA_URL" --output YouTube.ipa
-          else
-            curl --fail --location "$IPA_URL" --output YouTube.ipa
-          fi
-          file_type=$(file --mime-type -b YouTube.ipa)
-          if [[ "$file_type" != "application/x-ios-app" && "$file_type" != "application/zip" ]]; then
-            exit 1
-          fi
+        run: bash Scripts/fetch-ipa.sh "$IPA_URL" YouTube.ipa
 
       - name: Inject
         id: inject
