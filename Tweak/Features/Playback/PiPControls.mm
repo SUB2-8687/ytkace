@@ -220,13 +220,13 @@
         if ([alert respondsToSelector:setTitle] &&
             [alert respondsToSelector:setSubtitle] &&
             [alert respondsToSelector:show]) {
-            ((void (*)(id, SEL, id))objc_msgSend)(alert, setTitle, @"Picture in Picture");
-            ((void (*)(id, SEL, id))objc_msgSend)(alert, setSubtitle, message);
+            ((void (*)(id, SEL, id))objc_msgSend)(alert, setTitle, YTKACELocalized(@"Picture in Picture"));
+            ((void (*)(id, SEL, id))objc_msgSend)(alert, setSubtitle, YTKACELocalized(message));
             ((void (*)(id, SEL))objc_msgSend)(alert, show);
             return;
         }
     }
-    YTKACEShowNotice([NSString stringWithFormat:@"Picture in Picture\n%@", message]);
+    YTKACEShowNotice([NSString stringWithFormat:@"%@\n%@", YTKACELocalized(@"Picture in Picture"), YTKACELocalized(message)]);
 }
 
 - (void)stopObservingItem {

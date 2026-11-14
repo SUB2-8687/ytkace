@@ -605,7 +605,7 @@ UIViewController *YTKACEMakeDownloadLogController(void) {
                                                      style:UITableViewCellStyleSubtitle];
         if (self.searchResults.count == 0) {
             cell.textLabel.text = YTKACELocalized(@"No matching settings");
-            cell.textLabel.font = [UIFont systemFontOfSize:16.0];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
             cell.textLabel.textColor = UIColor.secondaryLabelColor;
             cell.detailTextLabel.text = nil;
             cell.imageView.image = nil;
@@ -654,6 +654,8 @@ UIViewController *YTKACEMakeDownloadLogController(void) {
     UITableViewCell *cell = [self baseCellForTableView:tableView style:UITableViewCellStyleValue1];
     cell.textLabel.text = YTKACELocalized(@"itzzace");
     cell.detailTextLabel.text = @"YTKACE";
+    cell.detailTextLabel.font = [UIFont monospacedDigitSystemFontOfSize:15.0
+                                                                 weight:UIFontWeightRegular];
     cell.imageView.image = YTKACEAssetImage(@"YTKIco", @"person.crop.circle");
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     return cell;

@@ -2,6 +2,7 @@
 #import "FFmpegMuxer.h"
 #import "MediaArtwork.h"
 #import "../../Runtime/Preferences.h"
+#import "../../Runtime/Localization.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
@@ -10,7 +11,7 @@ static NSString * const YTKACEImportErrorDomain = @"YTKACEMediaImport";
 
 static NSError *YTKACEImportError(NSString *message) {
     return [NSError errorWithDomain:YTKACEImportErrorDomain code:1
-        userInfo:@{NSLocalizedDescriptionKey: message ?: @"Import failed"}];
+        userInfo:@{NSLocalizedDescriptionKey: YTKACELocalized(message ?: @"Import failed")}];
 }
 
 static NSSet<NSString *> *YTKACEVideoExtensions(void) {

@@ -243,6 +243,9 @@ willDisplayHeaderView:(UIView *)view
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.editingAccessoryType = UITableViewCellAccessoryNone;
     cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+    // 오른쪽 값 표시는 다른 설정 화면과 같은 15pt 글꼴을 사용한다.
+    cell.detailTextLabel.font = [UIFont monospacedDigitSystemFontOfSize:15.0
+                                                                 weight:UIFontWeightRegular];
     cell.backgroundColor = YTKACEInterfaceBackgroundColor(self.traitCollection);
     cell.textLabel.textColor = UIColor.labelColor;
     cell.detailTextLabel.textColor = UIColor.secondaryLabelColor;

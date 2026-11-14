@@ -122,13 +122,9 @@ static NSDictionary *YTKACEPicker(NSString *title,
     };
 }
 
-static NSString *YTKACEStepperText(NSDictionary *item, double value) {
-    NSString *number = [NSString stringWithFormat:@"%.0f", value];
-    if ([item[@"unit"] isEqualToString:@"count"]) {
-        return [NSString stringWithFormat:@"%@: %@",
-                item[@"title"] ?: YTKACELocalized(@"Limit"), number];
-    }
-    return [NSString stringWithFormat:YTKACELocalized(@"Seconds: %@"), number];
+// 설정 화면 오른쪽의 값 표시(퍼센트, 초, 선택 항목 등)는 모두 이 글꼴을 사용한다.
+static UIFont *YTKACEValueFont(void) {
+    return [UIFont monospacedDigitSystemFontOfSize:15.0 weight:UIFontWeightRegular];
 }
 
 static NSDictionary *YTKACEStepper(NSString *title,
@@ -839,7 +835,14 @@ willDisplayHeaderView:(UIView *)view
     } else if ([type isEqualToString:@"stepper"]) {
         double stored = [YTKACEPreferenceObject(item[@"key"]) doubleValue];
         double value = stored > 0.0 ? stored : [item[@"fallback"] doubleValue];
-        cell.textLabel.text = YTKACEStepperText(item, value);
+        cell.textLabel.text = item[@"title"];
+        UILabel *stepperValue = [UILabel new];
+        stepperValue.font = YTKACEValueFont();
+        stepperValue.textColor = YTKACEAccentColor();
+        stepperValue.textAlignment = NSTextAlignmentRight;
+        stepperValue.text = [NSString stringWithFormat:@"%.0f", value];
+        [stepperValue setContentCompressionResistancePriority:UILayoutPriorityRequired
+                                                      forAxis:UILayoutConstraintAxisHorizontal];
         UIStepper *stepper = [UIStepper new];
         stepper.tintColor = YTKACEAccentColor();
         stepper.minimumValue = [item[@"minimum"] doubleValue];
@@ -852,12 +855,19 @@ willDisplayHeaderView:(UIView *)view
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         objc_setAssociatedObject(stepper,
                                  YTKACEValueLabelAssociation,
-                                 cell,
+                                 stepperValue,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [stepper addTarget:self
                     action:@selector(stepperChanged:)
           forControlEvents:UIControlEventValueChanged];
-        cell.accessoryView = stepper;
+        UIStackView *stepperAccessory =
+            [[UIStackView alloc] initWithArrangedSubviews:@[stepperValue, stepper]];
+        stepperAccessory.axis = UILayoutConstraintAxisHorizontal;
+        stepperAccessory.alignment = UIStackViewAlignmentCenter;
+        stepperAccessory.spacing = 12.0;
+        stepperAccessory.frame = CGRectMake(0.0, 0.0, 160.0, 32.0);
+        [stepperAccessory layoutIfNeeded];
+        cell.accessoryView = stepperAccessory;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else if ([type isEqualToString:@"slider"] && [item[@"stacked"] boolValue]) {
         double stored = [YTKACEPreferenceObject(item[@"key"]) doubleValue];
@@ -869,8 +879,7 @@ willDisplayHeaderView:(UIView *)view
         caption.textColor = UIColor.labelColor;
 
         UILabel *readout = [UILabel new];
-        readout.font = [UIFont monospacedDigitSystemFontOfSize:15.0
-                                                        weight:UIFontWeightSemibold];
+        readout.font = YTKACEValueFont();
         readout.textColor = YTKACEAccentColor();
         readout.textAlignment = NSTextAlignmentRight;
         readout.text = YTKACESliderValueText(item, value);
@@ -925,15 +934,15 @@ willDisplayHeaderView:(UIView *)view
     } else if ([type isEqualToString:@"slider"]) {
         double stored = [YTKACEPreferenceObject(item[@"key"]) doubleValue];
         double value = stored > 0.0 ? stored : [item[@"fallback"] doubleValue];
-        UIView *accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 158.0, 46.0)];
+        UIView *accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 158.0, 52.0)];
         UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 158.0, 30.0)];
         slider.minimumTrackTintColor = YTKACEAccentColor();
         slider.minimumValue = [item[@"minimum"] floatValue];
         slider.maximumValue = [item[@"maximum"] floatValue];
         slider.value = (float)value;
-        UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 28.0, 158.0, 14.0)];
-        valueLabel.font = [UIFont systemFontOfSize:10.0];
-        valueLabel.textColor = UIColor.tertiaryLabelColor;
+        UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 30.0, 158.0, 20.0)];
+        valueLabel.font = YTKACEValueFont();
+        valueLabel.textColor = YTKACEAccentColor();
         valueLabel.textAlignment = NSTextAlignmentRight;
         valueLabel.text = YTKACESliderValueText(item, value);
         objc_setAssociatedObject(slider, YTKACEItemAssociation, item, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -952,11 +961,12 @@ willDisplayHeaderView:(UIView *)view
         );
         if ([item[@"subtitle"] length] == 0) {
             cell.detailTextLabel.text = summary;
+            cell.detailTextLabel.font = YTKACEValueFont();
             cell.detailTextLabel.textColor = YTKACEAccentColor();
         } else {
             UILabel *value = [UILabel new];
             value.text = summary;
-            value.font = [UIFont systemFontOfSize:15.0];
+            value.font = YTKACEValueFont();
             value.textColor = YTKACEAccentColor();
             value.textAlignment = NSTextAlignmentRight;
             [value sizeToFit];
@@ -967,7 +977,7 @@ willDisplayHeaderView:(UIView *)view
         id stored = YTKACEPreferenceObject(item[@"key"]);
         UILabel *value = [UILabel new];
         value.text = [stored isKindOfClass:NSString.class] && [stored length] != 0 ? stored : item[@"placeholder"];
-        value.font = [UIFont systemFontOfSize:15.0];
+        value.font = YTKACEValueFont();
         value.textColor = YTKACEAccentColor();
         value.textAlignment = NSTextAlignmentRight;
         [value sizeToFit];
@@ -986,7 +996,7 @@ willDisplayHeaderView:(UIView *)view
         dot.layer.borderColor = UIColor.secondaryLabelColor.CGColor;
         cell.accessoryView = dot;
     } else if ([type isEqualToString:@"text"]) {
-        cell.textLabel.font = [UIFont systemFontOfSize:10.0];
+        cell.textLabel.font = [UIFont systemFontOfSize:13.0];
         cell.textLabel.textColor = UIColor.secondaryLabelColor;
         cell.textLabel.numberOfLines = 0;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -1023,9 +1033,9 @@ willDisplayHeaderView:(UIView *)view
 
 - (void)stepperChanged:(UIStepper *)sender {
     NSDictionary *item = objc_getAssociatedObject(sender, YTKACEItemAssociation);
-    UITableViewCell *cell = objc_getAssociatedObject(sender, YTKACEValueLabelAssociation);
+    UILabel *label = objc_getAssociatedObject(sender, YTKACEValueLabelAssociation);
     YTKACESetPreferenceObject(item[@"key"], @(sender.value));
-    cell.textLabel.text = YTKACEStepperText(item, sender.value);
+    label.text = [NSString stringWithFormat:@"%.0f", sender.value];
 }
 
 - (void)sliderStepped:(UIButton *)sender {
@@ -1142,7 +1152,7 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
                 self->_restoreRunning = NO;
                 [self setBackupProgressVisible:NO message:nil];
                 [self showResult:error == nil ? YTKACELocalized(@"Backup Restored") : YTKACELocalized(@"Restore Failed")
-                          message:error.localizedDescription];
+                          message:YTKACELocalized(error.localizedDescription)];
             }];
         _pickerMode = 0;
         return;
@@ -1151,7 +1161,7 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     [YTKACEMediaImporter importURLs:urls category:category
         completion:^(NSUInteger count, NSError *error) {
             for (NSURL *URL in scoped) [URL stopAccessingSecurityScopedResource];
-            NSString *message = error.localizedDescription ?: [NSString
+            NSString *message = YTKACELocalized(error.localizedDescription) ?: [NSString
                 stringWithFormat:YTKACELocalized(@"%lu items added to %@."),
                 (unsigned long)count, category];
             [self showResult:error == nil ? YTKACELocalized(@"Import Complete") : YTKACELocalized(@"Import Failed")
@@ -1278,7 +1288,7 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
         controller->_backupRunning = NO;
         [controller setBackupProgressVisible:NO message:nil];
         if (URL == nil || error != nil) {
-            NSString *message = error.localizedDescription ?: YTKACELocalized(@"The backup could not be created.");
+            NSString *message = YTKACELocalized(error.localizedDescription) ?: YTKACELocalized(@"The backup could not be created.");
             if (!YTKACEShowYouTubeDialog(YTKACELocalized(@"Backup Failed"), message)) {
                 [controller showResult:YTKACELocalized(@"Backup Failed") message:message];
             }

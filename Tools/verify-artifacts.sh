@@ -37,6 +37,12 @@ if [[ $# -eq 2 ]]; then
   test -n "$APP"
   test ! -e "$APP/Frameworks/CydiaSubstrate.framework"
   test -f "$APP/Frameworks/YTKACE.dylib"
+  while IFS= read -r lproj; do
+    case "$(basename "$lproj")" in
+      en.lproj|ko.lproj) ;;
+      *) echo "unexpected language pack: $lproj" >&2; exit 1 ;;
+    esac
+  done < <(find "$APP/YTKACE.bundle" -type d -name '*.lproj' -prune)
 
   EXECUTABLE="$(
     python3 - "$APP/Info.plist" <<'PY'

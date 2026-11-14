@@ -382,7 +382,7 @@ void YTKACESaveVideoToPhotosFile(NSURL *url,
 
 - (NSString *)failureMessageForError:(NSError *)error
                                   job:(YTKACEDownloadJob *)job {
-    NSString *detail = error.localizedDescription ?: YTKACELocalized(@"The download did not complete.");
+    NSString *detail = YTKACELocalized(error.localizedDescription) ?: YTKACELocalized(@"The download did not complete.");
     if (error.code == NSURLErrorCancelled) return YTKACELocalized(@"The download was cancelled.");
     if ([error.domain isEqualToString:@"YTKACESABR"]) {
         switch (error.code) {
@@ -998,7 +998,7 @@ void YTKACESaveVideoToPhotosFile(NSURL *url,
             UIImage *image = error == nil ? [UIImage imageWithData:data] : nil;
             if (image == nil) {
                 [weakSelf showAlertWithTitle:YTKACELocalized(@"Save Image")
-                    message:error.localizedDescription ?: YTKACELocalized(@"The image could not be loaded.")];
+                    message:YTKACELocalized(error.localizedDescription) ?: YTKACELocalized(@"The image could not be loaded.")];
                 return;
             }
             [PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
@@ -1008,7 +1008,7 @@ void YTKACESaveVideoToPhotosFile(NSURL *url,
                     [weakSelf showCompactNotice:YTKACELocalized(@"Image saved")];
                 } else {
                     [weakSelf showAlertWithTitle:YTKACELocalized(@"Save Image")
-                        message:saveError.localizedDescription ?:
+                        message:YTKACELocalized(saveError.localizedDescription) ?:
                             YTKACELocalized(@"The image could not be saved.")];
                 }
             }];
