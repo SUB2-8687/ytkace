@@ -243,6 +243,8 @@ willDisplayHeaderView:(UIView *)view
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.editingAccessoryType = UITableViewCellAccessoryNone;
     cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+    cell.detailTextLabel.font = [UIFont monospacedDigitSystemFontOfSize:15.0
+                                                                 weight:UIFontWeightRegular];
     cell.backgroundColor = YTKACEInterfaceBackgroundColor(self.traitCollection);
     cell.textLabel.textColor = UIColor.labelColor;
     cell.detailTextLabel.textColor = UIColor.secondaryLabelColor;

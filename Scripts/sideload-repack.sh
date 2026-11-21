@@ -75,6 +75,8 @@ with open(sys.argv[2], "wb") as handle:
 PY
 fi
 
+bash "$ROOT/Scripts/strip-extras.sh" "$APP"
+
 bash "$ROOT/Scripts/sign-bundle.sh" "$APP"
 
 mkdir -p "$(dirname "$OUTPUT")"

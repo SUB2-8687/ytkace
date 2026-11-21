@@ -123,6 +123,11 @@ static NSDictionary *YTKACEPicker(NSString *title,
     };
 }
 
+// 설정 화면 오른쪽의 값 표시(기본값, 1.5x, 퍼센트, 입력값 등)는 모두 이 글꼴을 사용한다.
+static UIFont *YTKACEValueFont(void) {
+    return [UIFont monospacedDigitSystemFontOfSize:15.0 weight:UIFontWeightRegular];
+}
+
 static NSString *YTKACEStepperText(NSDictionary *item, double value) {
     NSString *number = [NSString stringWithFormat:@"%.0f", value];
     if ([item[@"unit"] isEqualToString:@"count"]) {
@@ -231,8 +236,8 @@ static UIButton *YTKACEStepControl(BOOL increment,
                                    id target,
                                    SEL action) {
     UIImageSymbolConfiguration *glyph =
-        [UIImageSymbolConfiguration configurationWithPointSize:14.0
-                                                        weight:UIImageSymbolWeightSemibold];
+        [UIImageSymbolConfiguration configurationWithPointSize:15.0
+                                                        weight:UIImageSymbolWeightRegular];
     UIButton *control = [UIButton buttonWithType:UIButtonTypeSystem];
     control.tag = increment ? 1 : -1;
     control.tintColor = YTKACEAccentColor();
@@ -879,7 +884,7 @@ willDisplayHeaderView:(UIView *)view
             UILabel *caption = [UILabel new];
             caption.tag = 8802;
             caption.text = item[@"title"];
-            caption.font = [UIFont systemFontOfSize:16.0];
+            caption.font = [UIFont systemFontOfSize:17.0];
             caption.textColor = UIColor.labelColor;
             caption.translatesAutoresizingMaskIntoConstraints = NO;
             [cell.contentView addSubview:caption];
@@ -935,12 +940,11 @@ willDisplayHeaderView:(UIView *)view
 
         UILabel *caption = [UILabel new];
         caption.text = item[@"title"];
-        caption.font = [UIFont systemFontOfSize:16.0];
+        caption.font = [UIFont systemFontOfSize:17.0];
         caption.textColor = UIColor.labelColor;
 
         UILabel *readout = [UILabel new];
-        readout.font = [UIFont monospacedDigitSystemFontOfSize:15.0
-                                                        weight:UIFontWeightSemibold];
+        readout.font = YTKACEValueFont();
         readout.textColor = YTKACEAccentColor();
         readout.textAlignment = NSTextAlignmentRight;
         readout.text = YTKACESliderValueText(item, value);
@@ -995,15 +999,15 @@ willDisplayHeaderView:(UIView *)view
     } else if ([type isEqualToString:@"slider"]) {
         double stored = [YTKACEPreferenceObject(item[@"key"]) doubleValue];
         double value = stored > 0.0 ? stored : [item[@"fallback"] doubleValue];
-        UIView *accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 158.0, 46.0)];
+        UIView *accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 158.0, 52.0)];
         UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 158.0, 30.0)];
         slider.minimumTrackTintColor = YTKACEAccentColor();
         slider.minimumValue = [item[@"minimum"] floatValue];
         slider.maximumValue = [item[@"maximum"] floatValue];
         slider.value = (float)value;
-        UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 28.0, 158.0, 14.0)];
-        valueLabel.font = [UIFont systemFontOfSize:10.0];
-        valueLabel.textColor = UIColor.tertiaryLabelColor;
+        UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 30.0, 158.0, 20.0)];
+        valueLabel.font = YTKACEValueFont();
+        valueLabel.textColor = YTKACEAccentColor();
         valueLabel.textAlignment = NSTextAlignmentRight;
         valueLabel.text = YTKACESliderValueText(item, value);
         objc_setAssociatedObject(slider, YTKACEItemAssociation, item, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -1022,11 +1026,12 @@ willDisplayHeaderView:(UIView *)view
         );
         if ([item[@"subtitle"] length] == 0) {
             cell.detailTextLabel.text = summary;
+            cell.detailTextLabel.font = YTKACEValueFont();
             cell.detailTextLabel.textColor = YTKACEAccentColor();
         } else {
             UILabel *value = [UILabel new];
             value.text = summary;
-            value.font = [UIFont systemFontOfSize:15.0];
+            value.font = YTKACEValueFont();
             value.textColor = YTKACEAccentColor();
             value.textAlignment = NSTextAlignmentRight;
             [value sizeToFit];
@@ -1037,7 +1042,7 @@ willDisplayHeaderView:(UIView *)view
         id stored = YTKACEPreferenceObject(item[@"key"]);
         UILabel *value = [UILabel new];
         value.text = [stored isKindOfClass:NSString.class] && [stored length] != 0 ? stored : item[@"placeholder"];
-        value.font = [UIFont systemFontOfSize:15.0];
+        value.font = YTKACEValueFont();
         value.textColor = YTKACEAccentColor();
         value.textAlignment = NSTextAlignmentRight;
         [value sizeToFit];
