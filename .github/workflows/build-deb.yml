@@ -39,11 +39,39 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/.theos
-          key: roothide-theos-${{ runner.os }}-v1
+          key: roothide-theos-${{ runner.os }}-v2
 
       - name: Setup
         if: steps.cache-theos.outputs.cache-hit != 'true'
-        run: bash -c "$(curl -fsSL https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos)"
+        run: |
+          set -euo pipefail
+          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL \
+            https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos \
+            -o "$RUNNER_TEMP/install-theos.sh"
+          bash "$RUNNER_TEMP/install-theos.sh"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate iOS SDK
+        run: |
+          set -euo pipefail
+          sdk="$THEOS/sdks/iPhoneOS16.5.sdk"
+          if [[ ! -f "$sdk/usr/lib/libz.tbd" ]]; then
+            echo "iPhoneOS16.5 SDK is incomplete; downloading a clean copy."
+            for attempt in 1 2 3; do
+              rm -rf "$sdk"
+              if "$THEOS/bin/install-sdk" iPhoneOS16.5 && [[ -f "$sdk/usr/lib/libz.tbd" ]]; then
+                break
+              fi
+              if [[ "$attempt" == 3 ]]; then
+                echo "iPhoneOS16.5 SDK is still incomplete after 3 attempts." >&2
+                exit 1
+              fi
+              sleep $((attempt * 5))
+            done
+          fi
+
+          test -f "$sdk/usr/lib/libz.tbd"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
