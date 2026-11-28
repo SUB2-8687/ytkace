@@ -1,5 +1,6 @@
 #import "../../YTKACE.h"
 #import "../../Runtime/Preferences.h"
+#import "../../Runtime/Localization.h"
 #import "../../UI/Notice.h"
 
 #import <Photos/Photos.h>
@@ -348,8 +349,8 @@ static CGSize YTKACENativePoints(UIImage *image) {
         [PHAssetChangeRequest creationRequestForAssetFromImage:image];
     } completionHandler:^(BOOL success, __unused NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            YTKACEShowNotice(success ? @"Profile picture saved" :
-                @"Profile picture could not be saved");
+            YTKACEShowNotice(YTKACELocalized(success ? @"Profile picture saved" :
+                @"Profile picture could not be saved"));
         });
     }];
 }

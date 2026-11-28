@@ -1,6 +1,7 @@
 #import "YTKACEBackupManager.h"
 #import "DownloadLog.h"
 #import "../../Runtime/Preferences.h"
+#import "../../Runtime/Localization.h"
 
 #include <zlib.h>
 
@@ -8,7 +9,7 @@ static NSString * const YTKACEBackupErrorDomain = @"YTKACEBackup";
 
 static NSError *YTKACEBackupError(NSInteger code, NSString *message) {
     return [NSError errorWithDomain:YTKACEBackupErrorDomain code:code
-        userInfo:@{NSLocalizedDescriptionKey: message ?: @"Backup failed"}];
+        userInfo:@{NSLocalizedDescriptionKey: YTKACELocalized(message ?: @"Backup failed")}];
 }
 
 static NSError *YTKACEBackupException(NSException *exception) {

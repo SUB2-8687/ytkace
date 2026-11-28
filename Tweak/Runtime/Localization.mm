@@ -7,8 +7,31 @@
 NSString * const YTKACELanguageKey = @"YTKACE.Preference.Language";
 
 NSArray<NSString *> *YTKACEAvailableLanguages(void) {
-    return @[@"system", @"en", @"ar", @"ckb", @"de", @"es", @"fr", @"it",
-             @"ja", @"ko", @"pl", @"pt-BR", @"ru", @"tr", @"vi", @"zh-Hans", @"zh-Hant"];
+    // sideload IPA 빌드는 en/ko 외 언어팩을 지우므로(Scripts/strip-extras.sh),
+    // 실제로 번들에 들어 있는 언어만 목록에 노출한다.
+    static NSArray<NSString *> *languages;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSArray<NSString *> *all = @[@"system", @"en", @"ar", @"ckb", @"de", @"es", @"fr", @"it",
+                                     @"ja", @"ko", @"pl", @"pt-BR", @"ru", @"tr", @"vi", @"zh-Hans", @"zh-Hant"];
+        NSBundle *bundle = YTKACEAssetsBundle();
+        if (bundle == nil) {
+            languages = all;
+            return;
+        }
+        NSMutableArray<NSString *> *present = [NSMutableArray array];
+        for (NSString *code in all) {
+            if ([code isEqualToString:@"system"] || [code isEqualToString:@"en"]) {
+                [present addObject:code];
+                continue;
+            }
+            NSString *directory = [bundle.resourcePath stringByAppendingPathComponent:
+                [NSString stringWithFormat:@"%@.lproj", code]];
+            if ([NSFileManager.defaultManager fileExistsAtPath:directory]) [present addObject:code];
+        }
+        languages = [present copy];
+    });
+    return languages;
 }
 
 NSString *YTKACELanguageDisplayName(NSString *code) {
